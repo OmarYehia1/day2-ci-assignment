@@ -52,7 +52,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run pre-scan
-        uses: ./.github/actions/pre-scan
+        uses: ./.github/actions/pre-scan/action.yml
         with:
           scan-path: . 
   test:
@@ -158,7 +158,7 @@ jobs:
             -C extracted
 
       - name: Run post-scan
-        uses: ./.github/actions/post-scan
+        uses: ./.github/actions/post-scan/action.yml
         with:
           scan-path: extracted         
 
