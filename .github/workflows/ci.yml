@@ -41,7 +41,22 @@ env:
   APP_NAME: temperature
 
 jobs:
+  pre-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run pre-scan
+        uses: ./.github/actions/pre-scan
+        with:
+          scan-path: . 
   test:
+    needs: pre-scan
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -121,6 +136,32 @@ jobs:
           if-no-files-found: error
           retention-days: 5
 
+  post-scan:
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Download package
+        uses: actions/download-artifact@v4
+        with:
+          name: package
+          path: dist
+
+      - name: Extract package
+        env:
+          PACKAGE_VERSION: ${{ needs.package.outputs.version }}
+        shell: bash
+        run: |
+          mkdir -p extracted
+          tar -xzf "dist/temperature-${PACKAGE_VERSION}.tar.gz" \
+            -C extracted
+
+      - name: Run post-scan
+        uses: ./.github/actions/post-scan
+        with:
+          scan-path: extracted         
+
   verify:
     needs: package
     runs-on: ubuntu-latest
@@ -152,7 +193,7 @@ jobs:
           python3 -c "from temperature import celsius_to_fahrenheit as c; assert c(100) == 212; print('Package OK')"
 
   report:
-    needs: [test, package]
+    needs: [pre-scan, test, package, verify, post-scan]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5

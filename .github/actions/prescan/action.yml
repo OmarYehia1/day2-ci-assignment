@@ -1,0 +1,35 @@
+name: Pre-scan
+description: Scan source code for secrets and vulnerabilities
+
+inputs:
+  scan-path:
+    description: Directory to scan
+    required: false
+    default: .
+
+runs:
+  using: composite
+  steps:
+    - name: Scan for secrets with Gitleaks
+      uses: gitleaks/gitleaks-action@v2
+      with:
+        source: ${{ inputs.scan-path }}
+
+    - name: Scan for secrets with TruffleHog
+      shell: bash
+      env:
+        SCAN_PATH: ${{ inputs.scan-path }}
+      run: |
+        docker run --rm \
+          -v "$GITHUB_WORKSPACE/$SCAN_PATH:/pwd" \
+          trufflesecurity/trufflehog:latest \
+          filesystem /pwd --results=verified,unknown
+
+    - name: Scan for vulnerabilities with Trivy
+      uses: aquasecurity/trivy-action@v0.36.0
+      with:
+        scan-type: fs
+        scan-ref: ${{ inputs.scan-path }}
+        scanners: vuln,secret,misconfig
+        severity: HIGH,CRITICAL
+        exit-code: '1'
