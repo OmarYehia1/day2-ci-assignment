@@ -12,3 +12,5 @@ def is_freezing(celsius):
 # SECURITY TEST ONLY — fake example credentials
 AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
 AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+
+ghp_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOP
