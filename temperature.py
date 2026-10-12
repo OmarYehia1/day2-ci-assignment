@@ -8,3 +8,7 @@ def fahrenheit_to_celsius(fahrenheit):
 
 def is_freezing(celsius):
     return celsius <= 0
+
+# SECURITY TEST ONLY — fake example credentials
+AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
+AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
