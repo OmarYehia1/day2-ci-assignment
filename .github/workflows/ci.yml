@@ -55,7 +55,7 @@ jobs:
       - name: Run pre-scan
         uses: ./.github/actions/prescan
         with:
-          scan-path: . 
+          scan-path: /
   test:
     needs: pre-scan
     runs-on: ubuntu-latest
