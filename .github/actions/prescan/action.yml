@@ -6,6 +6,10 @@ inputs:
     description: Directory to scan
     required: false
     default: .
+  sonar-token:
+    description: Directory to scan
+    required: false
+    default: .    
 
 runs:
   using: composite
@@ -36,4 +40,4 @@ runs:
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v6
       env:
-       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+       SONAR_TOKEN: ${{ inputs.sonar-token }}

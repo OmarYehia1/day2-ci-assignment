@@ -56,6 +56,7 @@ jobs:
         uses: ./.github/actions/prescan
         with:
           scan-path: ./temperature.py
+          sonar-token: ${{secrets.SONAR_TOKEN}}
   test:
     needs: pre-scan
     runs-on: ubuntu-latest
